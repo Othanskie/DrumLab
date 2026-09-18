@@ -5,8 +5,8 @@ import CoreBluetooth
 
 final class ViewController: UIViewController, WKScriptMessageHandler, WKNavigationDelegate, CBCentralManagerDelegate, CBPeripheralDelegate {
     private var webView: WKWebView!
-    private var midiClient: MIDIClientRef?
-    private var inputPort: MIDIPortRef?
+    private var midiClient = MIDIClientRef()
+    private var inputPort = MIDIPortRef()
     private var bleCentral: CBCentralManager!
     private var blePeripheral: CBPeripheral?
     private var bleCharacteristic: CBCharacteristic?
@@ -64,7 +64,6 @@ final class ViewController: UIViewController, WKScriptMessageHandler, WKNavigati
 
     private func setupMIDI() {
         MIDIClientCreateWithBlock("DRUMLAB" as CFString, &midiClient) { _ in }
-        guard let midiClient else { return }
         MIDIInputPortCreateWithBlock(midiClient, "DRUMLAB Input" as CFString, &inputPort) { [weak self] packetList, _ in
             guard let self else { return }
             let packets = packetList.pointee
@@ -78,7 +77,6 @@ final class ViewController: UIViewController, WKScriptMessageHandler, WKNavigati
     }
 
     private func connect(endpoint: MIDIEndpointRef) {
-        guard let inputPort else { return }
         MIDIPortConnectSource(inputPort, endpoint, nil)
         sendStatus(kind: "midi", ready: true, text: "MIDI READY")
     }
@@ -91,7 +89,7 @@ final class ViewController: UIViewController, WKScriptMessageHandler, WKNavigati
     func centralManagerDidUpdateState(_ central: CBCentralManager) { if central.state != .poweredOn { sendStatus(kind: "bluetooth", ready: false, text: "Bluetooth \(central.state.rawValue)") } }
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) { bleCentral.stopScan(); blePeripheral = peripheral; peripheral.delegate = self; bleCentral.connect(peripheral) }
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) { peripheral.discoverServices([bleService]) }
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) { peripheral.services?.first?.discoverCharacteristics([bleCharacteristicUUID], for: peripheral) }
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) { if let service = peripheral.services?.first { peripheral.discoverCharacteristics([bleCharacteristicUUID], for: service) } }
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) { bleCharacteristic = service.characteristics?.first; if let c = bleCharacteristic { peripheral.setNotifyValue(true, for: c) }; sendStatus(kind: "ble", ready: true, text: "BLE MIDI READY (\(peripheral.name ?? "Controller"))"); sendJS("window.__iosBlePair && window.__iosBlePair({name:\(json(peripheral.name ?? "BLE MIDI Controller"))})") }
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) { if let value = characteristic.value { sendJS("window.__iosMidiCallback && window.__iosMidiCallback(\(json(Array(value))))") } }
 }
