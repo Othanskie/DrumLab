@@ -6,7 +6,6 @@ on:
 jobs:
   build-ipa:
     runs-on: macos-14
-
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -17,7 +16,7 @@ jobs:
       - name: Build unsigned iPad app
         run: |
           mkdir -p "$GITHUB_WORKSPACE/build/Release-iphoneos"
-
+          set -o pipefail
           xcodebuild \
             -project DRUMLAB-iPad.xcodeproj \
             -target DRUMLAB \
@@ -28,7 +27,16 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
             DEVELOPMENT_TEAM="" \
-            build
+            build 2>&1 | tee xcodebuild.log
+
+      - name: Upload Xcode compiler log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DRUMLAB-xcodebuild-log
+          path: xcodebuild.log
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Package IPA
         run: |
