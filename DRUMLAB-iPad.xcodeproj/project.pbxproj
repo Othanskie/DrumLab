@@ -1,0 +1,26 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ objects = {
+  111111111111111111111111 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+  222222222222222222222222 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+  333333333333333333333333 = { isa = PBXFileReference; lastKnownFileType = file.html; path = index.html; sourceTree = "<group>"; };
+  444444444444444444444444 = { isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+  555555555555555555555555 = { isa = PBXGroup; children = (111111111111111111111111, 222222222222222222222222, 333333333333333333333333, 444444444444444444444444); path = "DRUMLAB-iPad"; sourceTree = "<group>"; };
+  666666666666666666666666 = { isa = PBXGroup; children = (555555555555555555555555); sourceTree = "<group>"; };
+  777777777777777777777777 = { isa = PBXBuildFile; fileRef = 111111111111111111111111; };
+  888888888888888888888888 = { isa = PBXBuildFile; fileRef = 222222222222222222222222; };
+  999999999999999999999999 = { isa = PBXBuildFile; fileRef = 333333333333333333333333; };
+  AAAAAAAABBBBBBBBCCCCCCCC = { isa = PBXResourcesBuildPhase; files = (999999999999999999999999); };
+  BBBBBBBBCCCCCCCCDDDDDDDD = { isa = PBXSourcesBuildPhase; files = (777777777777777777777777, 888888888888888888888888); };
+  CCCCCCCCDDDDDDDDEEEEEEEE = { isa = PBXNativeTarget; buildConfigurationList = DDDDDDDDEEEEEEEEFFFFFFFF; buildPhases = (BBBBBBBBCCCCCCCCDDDDDDDD, AAAAAAAABBBBBBBBCCCCCCCC); name = DRUMLAB; productName = DRUMLAB; productType = "com.apple.product-type.application"; };
+  DDDDDDDDEEEEEEEEFFFFFFFF = { isa = XCConfigurationList; buildConfigurations = (EEEEEEEEFFFFFFFF00000000, FFFFFFFF0000000011111111); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  EEEEEEEEFFFFFFFF00000000 = { isa = XCBuildConfiguration; buildSettings = { INFOPLIST_FILE = "DRUMLAB-iPad/Info.plist"; PRODUCT_BUNDLE_IDENTIFIER = com.drumlab.ipad; PRODUCT_NAME = DRUMLAB; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = 2; IPHONEOS_DEPLOYMENT_TARGET = 15.0; }; name = Debug; };
+  FFFFFFFF0000000011111111 = { isa = XCBuildConfiguration; buildSettings = { INFOPLIST_FILE = "DRUMLAB-iPad/Info.plist"; PRODUCT_BUNDLE_IDENTIFIER = com.drumlab.ipad; PRODUCT_NAME = DRUMLAB; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = 2; IPHONEOS_DEPLOYMENT_TARGET = 15.0; }; name = Release; };
+  000000001111111122222222 = { isa = PBXProject; buildConfigurationList = 333333334444444455555555; compatibilityVersion = "Xcode 15.0"; mainGroup = 666666666666666666666666; productRefGroup = 666666666666666666666666; targets = (CCCCCCCCDDDDDDDDEEEEEEEE); };
+  333333334444444455555555 = { isa = XCConfigurationList; buildConfigurations = (444444445555555566666666, 555555556666666677777777); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  444444445555555566666666 = { isa = XCBuildConfiguration; buildSettings = { }; name = Debug; };
+  555555556666666677777777 = { isa = XCBuildConfiguration; buildSettings = { }; name = Release; };
+ };
+ rootObject = 000000001111111122222222;
+}
