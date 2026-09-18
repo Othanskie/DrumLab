@@ -1,0 +1,45 @@
+name: Build DRUMLAB IPA for Sideloadly
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer || true
+
+      - name: Build unsigned iPad app
+        run: |
+          xcodebuild \
+            -project DRUMLAB-iPad.xcodeproj \
+            -target DRUMLAB \
+            -sdk iphoneos \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            build
+
+      - name: Package IPA
+        run: |
+          APP_PATH="build/Build/Products/Release-iphoneos/DRUMLAB.app"
+          test -d "$APP_PATH"
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/DRUMLAB.app
+          zip -qry DRUMLAB-sideloadly.ipa Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DRUMLAB-sideloadly-ipa
+          path: DRUMLAB-sideloadly.ipa
+          retention-days: 7
